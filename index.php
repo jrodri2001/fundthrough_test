@@ -2,6 +2,8 @@
 
 include 'bookapi.php';
 
+$line_ending = "</br>";
+$separator = "</br></br>";
 $api = new BookAPI();
 
 $results =  $api->getLists([
@@ -14,16 +16,19 @@ if (!$results){
     die();
 }
 
+if (php_sapi_name() === 'cli'){
+    $line_ending = ", ";
+    $separator = "\n";
+}
+
 $i=1;
 foreach ($results as $result){
-    echo "#$i, ";
-    echo "List Name:" . $result->book_details[0]->title .", ";
-    echo "Author:" . $result->book_details[0]->author . ", ";
-    echo "Rank:" . $result->rank . ", ";
+    echo "#$i ";
+    echo "List Name:" . $result->book_details[0]->title . $line_ending;
+    echo "Author:" . $result->book_details[0]->author . $line_ending;
+    echo "Rank:" . $result->rank . $line_ending;
     echo "Weeks on List:" . $result->weeks_on_list;
-    echo "\n";
+    echo $separator;
     if ($i == 10) break;
     $i++;
 }
-
-echo "done";
